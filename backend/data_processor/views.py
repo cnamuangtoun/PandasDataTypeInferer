@@ -1,0 +1,22 @@
+from django.shortcuts import render
+from django.http import JsonResponse
+from .models import ProcessedFile
+from django.views.decorators.csrf import csrf_exempt
+from .cleaner import read_and_convert  # Import your script
+
+
+@csrf_exempt
+def process_file(request):
+    if request.method == 'POST':
+        uploaded_file = request.FILES['file']
+        try:
+            # Process the file
+            processed_df = read_and_convert(uploaded_file)       
+            data = processed_df.to_json(orient='records')
+            return JsonResponse({'processed_data': data})
+
+        except Exception as e:
+            print(str(e))
+            return JsonResponse({'error': str(e)})
+
+    return render(request, 'data_processor/upload.html')
