@@ -30,12 +30,10 @@ function FileUpload() {
         }
       });
 
-
-      console.log(response.data.processed_data);
-      // const dataProcessed = JSON.parse(response.data.processed_data);
-
       const parsedData = JSON.parse(response.data.processed_data);
-      setProcessedData(parsedData);
+      const dataTypes = response.data.data_types;
+
+      setProcessedData({ parsedData , dataTypes });
     } catch (error) {
       console.error('Error uploading file:', error);
       setError('Error uploading file', error);
@@ -49,9 +47,9 @@ function FileUpload() {
         <button type="submit">Upload</button>
       </form>
       {error && <div>{error}</div>}
-      {processedData && <DisplayProcessedData data={processedData} />}
+      {processedData && (<DisplayProcessedData data={processedData.parsedData} dataTypes={processedData.dataTypes}/>)}
     </div>
   );
-}
+} 
 
 export default FileUpload;
